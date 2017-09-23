@@ -6,6 +6,24 @@
     tools:context="com.snark.sumarizemeet.ExtAudioRecorder">
 
     <RelativeLayout
+        android:id="@+id/record"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:gravity="center_vertical"
+        android:layout_centerInParent="true">
+
+    <Button
+        android:id="@+id/btn_record"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/start"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
         android:id="@+id/title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -22,24 +40,6 @@
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
             android:text="Start the Meeting" />
-
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:id="@+id/record"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:clickable="true"
-        android:gravity="center_vertical"
-        android:layout_centerInParent="true">
-
-    <Button
-        android:id="@+id/btn_record"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/start"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true" />
 
     </RelativeLayout>
 

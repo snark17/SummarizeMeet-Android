@@ -34,7 +34,7 @@ public class ExtAudioRecorder extends Activity {
     private boolean isRecording = false;
 
     private static Button mRecordButton = null;
-    private static Button mPlayButton = null;
+    private static Button mFinishButton = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,8 +51,8 @@ public class ExtAudioRecorder extends Activity {
     }
 
     private void setButtonHandlers() {
-        mRecordButton = findViewById(R.id.record_btn);
-        mPlayButton = findViewById(R.id.play_btn);
+        mRecordButton = findViewById(R.id.btn_record);
+        mFinishButton = findViewById(R.id.btn_finish);
 
         mRecordButton.setOnClickListener(new View.OnClickListener() {
             @Override
