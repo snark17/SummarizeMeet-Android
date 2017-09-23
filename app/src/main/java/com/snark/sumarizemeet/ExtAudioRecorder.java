@@ -19,6 +19,11 @@ import android.support.v4.app.ActivityCompat;
 import android.view.View;
 import android.widget.Button;
 
+import com.ibm.watson.developer_cloud.speech_to_text.v1.SpeechToText;
+import com.ibm.watson.developer_cloud.speech_to_text.v1.model.RecognizeOptions;
+import com.ibm.watson.developer_cloud.speech_to_text.v1.model.SpeechResults;
+import com.ibm.watson.developer_cloud.speech_to_text.v1.websocket.BaseRecognizeCallback;
+
 public class ExtAudioRecorder extends Activity {
 
     private static final int RECORDER_BPP = 16;
@@ -158,8 +163,43 @@ public class ExtAudioRecorder extends Activity {
 
         copyWaveFile(mTmpFileName, mWavFileName);
         deleteTempFile();
+        make_request();
     }
+    private void make_request(){
+        SpeechToText service = new SpeechToText();
+        service.setUsernameAndPassword("b06f630e-1815-4fa5-b35b-3a229829d8b1", "5lIGB3ugweLZ");
 
+        RecognizeOptions options = new RecognizeOptions.Builder()
+                .model("en-US_BroadbandModel").contentType("audio/wav")
+                .interimResults(true).maxAlternatives(0)
+                .build();
+
+        BaseRecognizeCallback callback = new BaseRecognizeCallback() {
+            @Override
+            public void onTranscription(SpeechResults speechResults) {
+                System.out.println(speechResults);
+
+
+
+                
+            }
+
+
+            @Override
+            public void onDisconnected() {
+                //System.exit(0);
+            }
+        };
+
+        try {
+            service.recognizeUsingWebSocket
+                    (new FileInputStream(getExternalCacheDir().getAbsolutePath() + "/audiorecord.wav"), options, callback);
+        }
+        catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+    }
     private void deleteTempFile() {
         File file = new File(mTmpFileName);
         file.delete();
