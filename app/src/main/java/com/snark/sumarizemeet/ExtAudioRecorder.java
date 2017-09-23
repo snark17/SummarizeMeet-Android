@@ -20,11 +20,6 @@ import android.support.v4.app.ActivityCompat;
 import android.view.View;
 import android.widget.Button;
 
-import com.ibm.watson.developer_cloud.speech_to_text.v1.SpeechToText;
-import com.ibm.watson.developer_cloud.speech_to_text.v1.model.RecognizeOptions;
-import com.ibm.watson.developer_cloud.speech_to_text.v1.model.SpeechResults;
-import com.ibm.watson.developer_cloud.speech_to_text.v1.websocket.BaseRecognizeCallback;
-
 public class ExtAudioRecorder extends Activity {
     private static final int RECORDER_BPP = 16;
     private static final int RECORDER_SAMPLERATE = 44100;

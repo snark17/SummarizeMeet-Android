@@ -3,6 +3,11 @@ package com.snark.sumarizemeet;
 import android.app.Activity;
 import android.os.Bundle;
 
+import com.ibm.watson.developer_cloud.speech_to_text.v1.SpeechToText;
+import com.ibm.watson.developer_cloud.speech_to_text.v1.model.RecognizeOptions;
+import com.ibm.watson.developer_cloud.speech_to_text.v1.model.SpeechResults;
+import com.ibm.watson.developer_cloud.speech_to_text.v1.websocket.BaseRecognizeCallback;
+
 public class SummarizeText extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -10,8 +15,6 @@ public class SummarizeText extends Activity {
         setContentView(R.layout.display_summary);
         make_request();
     }
-    
-
 
     private void make_request(){
         SpeechToText service = new SpeechToText();
