@@ -3,6 +3,9 @@ package com.snark.sumarizemeet;
 import android.app.Activity;
 import android.os.Bundle;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+
 import com.ibm.watson.developer_cloud.speech_to_text.v1.SpeechToText;
 import com.ibm.watson.developer_cloud.speech_to_text.v1.model.RecognizeOptions;
 import com.ibm.watson.developer_cloud.speech_to_text.v1.model.SpeechResults;
