@@ -43,23 +43,4 @@
 
     </RelativeLayout>
 
-    <RelativeLayout
-        android:id="@+id/finish"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="20sp"
-        android:clickable="true"
-        android:gravity="center_vertical"
-        android:layout_alignParentBottom="true">
-
-        <Button
-            android:id="@+id/btn_finish"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Finish Meeting"
-            android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true" />
-
-    </RelativeLayout>
-
 </RelativeLayout>

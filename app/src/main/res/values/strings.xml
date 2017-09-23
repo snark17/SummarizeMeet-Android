@@ -1,5 +1,5 @@
 <resources>
     <string name="app_name">Summarize It</string>
-    <string name="start">Start Recording</string>
-    <string name="stop">Stop Recording</string>
+    <string name="start">Start Meeting</string>
+    <string name="stop">End Meeting</string>
 </resources>

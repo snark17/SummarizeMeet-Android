@@ -5,12 +5,17 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+
+import android.Manifest;
+import android.content.pm.PackageManager;
 import android.media.AudioFormat;
 import android.media.AudioRecord;
 import android.media.MediaRecorder;
 import android.os.Bundle;
 
 import android.app.Activity;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.view.View;
 import android.widget.Button;
 
@@ -33,12 +38,29 @@ public class ExtAudioRecorder extends Activity {
     private boolean isRecording = false;
 
     private static Button mRecordButton = null;
-    private static Button mFinishButton = null;
+
+    private boolean permissionToRecordAccepted = false;
+    private String [] permissions = {Manifest.permission.RECORD_AUDIO};
+    private static final int REQUEST_RECORD_AUDIO_PERMISSION = 200;
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode){
+            case REQUEST_RECORD_AUDIO_PERMISSION:
+                permissionToRecordAccepted  = grantResults[0] == PackageManager.PERMISSION_GRANTED;
+                break;
+        }
+        if (!permissionToRecordAccepted ) finish();
+
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_record_audio);
+
+        ActivityCompat.requestPermissions(this, permissions, REQUEST_RECORD_AUDIO_PERMISSION);
         setButtonHandlers();
 
         bufferSize = AudioRecord.getMinBufferSize(RECORDER_SAMPLERATE,RECORDER_CHANNELS,RECORDER_AUDIO_ENCODING)*3;
@@ -51,7 +73,6 @@ public class ExtAudioRecorder extends Activity {
 
     private void setButtonHandlers() {
         mRecordButton = findViewById(R.id.btn_record);
-        mFinishButton = findViewById(R.id.btn_finish);
 
         mRecordButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -69,7 +90,8 @@ public class ExtAudioRecorder extends Activity {
     }
 
     private void startRecording() {
-        recorder = new AudioRecord(MediaRecorder.AudioSource.MIC,
+        recorder = new AudioRecord(
+                MediaRecorder.AudioSource.MIC,
                 RECORDER_SAMPLERATE,
                 RECORDER_CHANNELS,
                 RECORDER_AUDIO_ENCODING,
@@ -102,14 +124,9 @@ public class ExtAudioRecorder extends Activity {
             e.printStackTrace();
         }
 
-        int read = 0;
         if (null != os) {
             while(isRecording) {
-                read = recorder.read(data, 0, bufferSize);
-                if (read > 0){
-                }
-
-                if (AudioRecord.ERROR_INVALID_OPERATION != read) {
+                if (AudioRecord.ERROR_INVALID_OPERATION != recorder.read(data, 0, bufferSize)) {
                     try {
                         os.write(data);
                     } catch (IOException e) {
