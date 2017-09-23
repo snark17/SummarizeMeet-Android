@@ -5,4 +5,11 @@
     android:layout_height="match_parent"
     tools:context="com.snark.sumarizemeet.SummarizeText">
 
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true">
+
+    </FrameLayout>
 </RelativeLayout>
