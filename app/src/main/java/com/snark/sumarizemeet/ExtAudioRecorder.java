@@ -26,7 +26,6 @@ public class ExtAudioRecorder extends Activity {
     private static String mWavFileName = null;
 
     private static boolean recording;
-    private static boolean playing;
 
     private AudioRecord recorder = null;
     private int bufferSize = 0;
