@@ -31,9 +31,10 @@ public class SummarizeText extends Activity {
         BaseRecognizeCallback callback = new BaseRecognizeCallback() {
             @Override
             public void onTranscription(SpeechResults speechResults) {
-                System.out.println(speechResults);
 
-
+               if (speechResults.isFinal()) {
+                   System.out.println(speechResults);
+               }
 
 
             }
