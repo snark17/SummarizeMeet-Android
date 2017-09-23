@@ -2,6 +2,10 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+<<<<<<< HEAD
+=======
+      <module fileurl="file://$PROJECT_DIR$/SumarizeMeet.iml" filepath="$PROJECT_DIR$/SumarizeMeet.iml" />
+>>>>>>> 8b27e290590d5acc6d9c53fe2bf4e94a376679f4
       <module fileurl="file://$PROJECT_DIR$/SummarizeMeet-Android.iml" filepath="$PROJECT_DIR$/SummarizeMeet-Android.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
