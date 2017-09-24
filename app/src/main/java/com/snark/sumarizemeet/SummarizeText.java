@@ -53,10 +53,10 @@ public class SummarizeText extends Activity {
             }
         });
 
-        wv = (WebView) findViewById(R.id.wv);
+        wv = findViewById(R.id.wv);
+        wv.getSettings().setJavaScriptEnabled(true);
         final WebSettings webSettings = wv.getSettings();
         webSettings.setJavaScriptEnabled(true);
-        wv.getSettings().setJavaScriptEnabled(true);
         webSettings.setBuiltInZoomControls(true);
         webSettings.setSupportZoom(true);
         webSettings.setUseWideViewPort(true);
@@ -70,10 +70,8 @@ public class SummarizeText extends Activity {
                 int dataset[] = new int[] {5,10,15,20,35};
                 String text = Arrays.toString(dataset);
 
-                wv.loadUrl("javascript:initGraph(" +
-                        text + ", " +
-                (wv.getHeight()) + ", "
-                        + (wv.getWidth()) + ")");
+                wv.loadUrl("javascript:initGraph(" + text + ", " +
+                        (wv.getHeight()) + ", " + (wv.getWidth()) + ")");
             }
         });
 
