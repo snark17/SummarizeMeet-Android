@@ -1,22 +1,9 @@
 <resources>
-<<<<<<< HEAD
     <style name="Natural" parent="Theme.AppCompat.Light.NoActionBar" >
         <item name="android:colorBackground">@color/background_material_light</item>
         <item name="android:colorForeground">@color/foreground_material_light</item>
-    </style>
-=======
-
-    <!-- Base application theme. -->
-    <!--<style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">-->
-        <!--&lt;!&ndash; Customize your theme here. &ndash;&gt;-->
         <!--<item name="colorPrimary">@color/colorPrimary</item>-->
         <!--<item name="colorPrimaryDark">@color/colorPrimaryDark</item>-->
         <!--<item name="colorAccent">@color/colorAccent</item>-->
-    <!--</style>-->
-
-    <style name="DarkTheme" parent="Theme.AppCompat.NoActionBar" >
-        <item name="android:windowBackground">?attr/colorBackgroundFloating</item>
     </style>
-
->>>>>>> 6267af5941cd888b114198f0db56ce0315e0f216
 </resources>
