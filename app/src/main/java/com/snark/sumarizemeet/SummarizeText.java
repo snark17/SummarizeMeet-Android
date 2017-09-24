@@ -21,11 +21,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.github.mikephil.charting.charts.BarChart;
+import com.github.mikephil.charting.components.Description;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
+import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
+import com.github.mikephil.charting.utils.ColorTemplate;
 import com.ibm.watson.developer_cloud.natural_language_understanding.v1.NaturalLanguageUnderstanding;
 import com.ibm.watson.developer_cloud.natural_language_understanding.v1.model.AnalysisResults;
 import com.ibm.watson.developer_cloud.natural_language_understanding.v1.model.AnalyzeOptions;
@@ -99,7 +102,8 @@ public class SummarizeText extends Activity {
     }
 
     private void update_chart() {
-        BarDataSet set = new BarDataSet(entries, "BarDataSet");
+        BarDataSet set = new BarDataSet(entries, "Tones");
+        set.setColors(ColorTemplate.PASTEL_COLORS);
         BarData data = new BarData(set);
 
         data.setBarWidth(0.9f); // set custom bar width
@@ -116,6 +120,9 @@ public class SummarizeText extends Activity {
         xAxis.setTextColor(Color.BLACK);
         xAxis.setDrawAxisLine(true);
         xAxis.setDrawGridLines(false);
+        xAxis.setValueFormatter(new IndexAxisValueFormatter(new String[]{"Anger", "Disgust", "Fear", "Joy", "Sadness"}));
+        xAxis.setGranularity(1f);
+        xAxis.setGranularityEnabled(true);
 
         YAxis yAxis = chart.getAxisLeft();
         yAxis.setDrawLabels(true);
@@ -125,10 +132,20 @@ public class SummarizeText extends Activity {
         yAxis.setAxisMinimum(0f);
         chart.getAxisRight().setEnabled(false); // no right axis
 
+        Description description = new Description();
+        description.setText("");
+        chart.setDescription(description);
+
+        for (float i=0;i<5;i++) {
+            entries.add(new BarEntry(i,0f));
+        }
+
+        update_chart();
         chart.invalidate();
     }
 
     private void update_entries(long ts_long, List<ToneScore> toneScores) {
+        entries = new ArrayList<>();
         for (ToneScore ts : toneScores) {
             String name = ts.getId();
             float score = ts.getScore().floatValue();
