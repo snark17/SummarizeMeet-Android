@@ -3,21 +3,24 @@ function initGraph(data, pHeight, pWidth) {
     var height = parseInt(pHeight);
     var width = parseInt(pWidth);
     var textLabelSuffix = "%";
-    var svg = d3.select("body").append("svg").attr("height", height).attr("width", width);
+    var svg = d3.select("#bargraph");
+
+    svg.attr("width", width).attr("height", height);
 
     // Parse the date / time
     var	parseDate = d3.time.format("%Y-%m").parse;
+    svg.append("g");
 
     var x = d3.scale.ordinal().rangeRoundBands([0, width], .05);
 
     var y = d3.scale.linear().range([height, 0]);
 
-    var xAxis = d3.svg.axis()
+    var xAxis = svg.axis()
         .scale(x)
         .orient("bottom")
         .tickFormat(d3.time.format("%Y-%m"));
 
-    var yAxis = d3.svg.axis()
+    var yAxis = svg.axis()
         .scale(y)
         .orient("left")
         .ticks(10);
