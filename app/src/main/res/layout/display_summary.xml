@@ -41,7 +41,7 @@
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:minHeight="100sp"
+            android:minHeight="150sp"
             android:layout_marginRight="20sp"
             android:layout_marginLeft="20sp"
             android:layout_marginBottom="20sp"
@@ -54,14 +54,14 @@
     <RelativeLayout
         android:id="@+id/graph"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_below="@+id/summary"
         android:layout_above="@+id/btn_return"
         android:clickable="true"
         android:gravity="center_vertical"
         android:layout_centerInParent="true">
         <WebView
-            android:id="@+id/graph"
+            android:id="@+id/wv"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:minHeight="200sp"

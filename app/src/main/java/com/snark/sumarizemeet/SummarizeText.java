@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.webkit.WebView;
 import android.widget.Button;
 
 import java.io.FileInputStream;
@@ -34,13 +35,8 @@ public class SummarizeText extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.display_summary);
-        setButtonHandlers();
-        make_request();
-    }
 
-    private void setButtonHandlers() {
         mReturnButton = findViewById(R.id.btn_return);
-
         mReturnButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -48,6 +44,11 @@ public class SummarizeText extends Activity {
                 startActivity(extAudioRecorder);
             }
         });
+
+        WebView wv = findViewById(R.id.wv);
+        wv.loadUrl("file:///android_asset/html/sentiments.html");
+
+        make_request();
     }
 
     private void make_request(){

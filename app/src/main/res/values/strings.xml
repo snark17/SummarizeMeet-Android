@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">memo.ize</string>
+    <string name="app_name">Memo.ize</string>
     <string name="start">Start Meeting</string>
     <string name="stop">End Meeting</string>
 </resources>
