@@ -8,15 +8,33 @@
         android:id="@+id/graph"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/meeting_return"
+        android:layout_above="@+id/keywords"
+        android:layout_alignParentTop="true"
         android:clickable="true"
-        android:layout_margin="20sp"
-        android:background="@drawable/light_rectangle">
+        android:layout_margin="20sp">
         <com.github.mikephil.charting.charts.BarChart
             android:id="@+id/chart"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
         </com.github.mikephil.charting.charts.BarChart>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/keywords"
+        android:layout_width="match_parent"
+        android:layout_height="50sp"
+        android:layout_above="@+id/meeting_return"
+        android:layout_marginRight="20sp"
+        android:layout_marginLeft="20sp"
+        android:layout_marginBottom="20sp"
+        android:background="@drawable/light_rectangle">
+        <TextView
+            android:id="@+id/words"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:textColor="@color/primary_dark_material_light"
+            android:background="@drawable/light_rectangle">
+        </TextView>
     </RelativeLayout>
 
     <RelativeLayout
