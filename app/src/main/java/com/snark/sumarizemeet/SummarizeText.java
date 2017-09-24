@@ -51,20 +51,20 @@ public class SummarizeText extends Activity {
     private static final int RECORDER_CHANNELS = AudioFormat.CHANNEL_IN_STEREO;
     private static final int RECORDER_AUDIO_ENCODING = AudioFormat.ENCODING_PCM_16BIT;
 
-    private static String mTmpFileName = null;
-    private static String mWavFileName = null;
+    private static String tmp_file_name = null;
+    private static String wav_file_name = null;
 
     private AudioRecord recorder = null;
     private int bufferSize = 0;
-    private Thread recordingThread = null;
-    private boolean isRecording = false;
+    private Thread recording_thread = null;
+    private boolean is_recording = false;
 
     private LineChart chart;
-    private ArrayList<Entry> angerEntries = new ArrayList<>();
-    private ArrayList<Entry> disgustEntries = new ArrayList<>();
-    private ArrayList<Entry> fearEntries = new ArrayList<>();
-    private ArrayList<Entry> joyEntries = new ArrayList<>();
-    private ArrayList<Entry> sadnessEntries = new ArrayList<>();
+    private ArrayList<Entry> anger_entries = new ArrayList<>();
+    private ArrayList<Entry> disgust_entries = new ArrayList<>();
+    private ArrayList<Entry> fear_entries = new ArrayList<>();
+    private ArrayList<Entry> joy_entries = new ArrayList<>();
+    private ArrayList<Entry> sadness_entries = new ArrayList<>();
     private float startTime = 0f;
 
     Button mStopButton;
@@ -76,17 +76,16 @@ public class SummarizeText extends Activity {
         setContentView(R.layout.display_summary);
 
         bufferSize = AudioRecord.getMinBufferSize(RECORDER_SAMPLERATE, RECORDER_CHANNELS, RECORDER_AUDIO_ENCODING)*3;
-        mTmpFileName = getExternalCacheDir().getAbsolutePath() + "/audiorecord.3gp";
-        mWavFileName = getExternalCacheDir().getAbsolutePath() + "/audiorecord.wav";
-
-        startRecording();
+        tmp_file_name = getExternalCacheDir().getAbsolutePath() + "/audiorecord.3gp";
+        wav_file_name = getExternalCacheDir().getAbsolutePath() + "/audiorecord.wav";
 
         mStopButton = findViewById(R.id.btn_return);
         mStopButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (!completed) {
-                    stopRecording();
+                    stop_recording();
+                    make_request();
                     mStopButton.setText(R.string.goback);
                 } else {
                     Intent homeActivity = new Intent(SummarizeText.this, HomeActivity.class);
@@ -97,31 +96,30 @@ public class SummarizeText extends Activity {
         });
 
         initialize_data();
-        make_request();
         chart = findViewById(R.id.chart);
-        update_chart();
         initialize_chart();
+        start_recording();
     }
 
     private void initialize_data() {
-        angerEntries.add(new Entry(0f, 0f));
-        disgustEntries.add(new Entry(0f, 0f));
-        fearEntries.add(new Entry(0f, 0f));
-        joyEntries.add(new Entry(0f, 0f));
-        sadnessEntries.add(new Entry(0f, 0f));
+        anger_entries.add(new Entry(0f, 0f));
+        disgust_entries.add(new Entry(0f, 0f));
+        fear_entries.add(new Entry(0f, 0f));
+        joy_entries.add(new Entry(0f, 0f));
+        sadness_entries.add(new Entry(0f, 0f));
     }
 
     private void update_chart() {
-        LineDataSet angerDataSet = new LineDataSet(angerEntries, "Anger");
-        angerDataSet.setColor(Color.BLUE);
-        LineDataSet disgustDataSet = new LineDataSet(disgustEntries, "Disgust");
-        disgustDataSet.setColor(Color.RED);
-        LineDataSet fearDataSet = new LineDataSet(fearEntries, "Fear");
-        fearDataSet.setColor(Color.GREEN);
-        LineDataSet joyDataSet = new LineDataSet(joyEntries, "Joy");
-        joyDataSet.setColor(Color.YELLOW);
-        LineDataSet sadnessDataSet = new LineDataSet(sadnessEntries, "Sadness");
-        sadnessDataSet.setColor(Color.MAGENTA);
+        LineDataSet angerDataSet = new LineDataSet(anger_entries, "Anger");
+        angerDataSet.setColor(Color.rgb(64, 89, 128));
+        LineDataSet disgustDataSet = new LineDataSet(disgust_entries, "Disgust");
+        disgustDataSet.setColor(Color.rgb(149, 165, 124));
+        LineDataSet fearDataSet = new LineDataSet(fear_entries, "Fear");
+        fearDataSet.setColor(Color.rgb(217, 184, 162));
+        LineDataSet joyDataSet = new LineDataSet(joy_entries, "Joy");
+        joyDataSet.setColor(Color.rgb(191, 134, 134));
+        LineDataSet sadnessDataSet = new LineDataSet(sadness_entries, "Sadness");
+        sadnessDataSet.setColor(Color.rgb(179, 48, 80));
 
         List<ILineDataSet> dataSets = new ArrayList<>();
         dataSets.add(angerDataSet);
@@ -150,30 +148,29 @@ public class SummarizeText extends Activity {
         yAxis.setDrawGridLines(false);
         yAxis.setDrawZeroLine(true);
         yAxis.setAxisMinimum(0f);
-        yAxis.setAxisMaximum(1f);
         chart.getAxisRight().setEnabled(false); // no right axis
+
+        chart.invalidate();
     }
 
-    private void update_entries(long tsLong, List<ToneScore> toneScores) {
+    private void update_entries(long ts_long, List<ToneScore> toneScores) {
         if (startTime == 0) {
-            startTime = tsLong;
+            startTime = ts_long;
         }
-        tsLong -= startTime;
+        ts_long -= startTime;
         for (ToneScore ts : toneScores) {
             String name = ts.getId();
-            System.out.println("NAME " + name);
             float score = ts.getScore().floatValue();
             if (name.equals("anger")) {
-                System.out.println("adding anger");
-                angerEntries.add(new Entry(tsLong, score));
+                anger_entries.add(new Entry(ts_long, score));
             } else if (name.equals("disgust")) {
-                disgustEntries.add(new Entry(tsLong, score));
+                disgust_entries.add(new Entry(ts_long, score));
             } else if (name.equals("fear")) {
-                fearEntries.add(new Entry(tsLong, score));
+                fear_entries.add(new Entry(ts_long, score));
             } else if (name.equals("joy")) {
-                joyEntries.add(new Entry(tsLong, score));
+                joy_entries.add(new Entry(ts_long, score));
             } else {
-                sadnessEntries.add(new Entry(tsLong, score));
+                sadness_entries.add(new Entry(ts_long, score));
             }
         }
     }
@@ -192,16 +189,15 @@ public class SummarizeText extends Activity {
             @Override
             public void onTranscription(SpeechResults speechResults) {
                if (speechResults.isFinal()) {
-
                   Transcript value = (Transcript) speechResults.getResults().toArray()[0];
                    SpeechAlternative middle = (SpeechAlternative) value.getAlternatives().toArray()[0];
                    System.out.println(middle.getTranscript());
 
-                   Long tsLong = System.currentTimeMillis()/1000;
-                   System.out.println(tsLong);
+                   Long ts_long = System.currentTimeMillis()/1000;
+                   System.out.println(ts_long);
 
-                   get_nlp(middle.getTranscript(), tsLong);
-                   get_tone(middle.getTranscript(), tsLong);
+                   get_nlp(middle.getTranscript(), ts_long);
+                   get_tone(middle.getTranscript(), ts_long);
                }
             }
 
@@ -217,7 +213,7 @@ public class SummarizeText extends Activity {
         }
     }
 
-    private void get_nlp(String text, Long tsLong){
+    private void get_nlp(String text, Long ts_long){
         NaturalLanguageUnderstanding service = new NaturalLanguageUnderstanding(
                 NaturalLanguageUnderstanding.VERSION_DATE_2017_02_27,
                 "87dd97fe-25de-4ea0-97ff-765925ac659f",
@@ -252,7 +248,7 @@ public class SummarizeText extends Activity {
         System.out.println(response.toString());
     }
 
-    private void get_tone(String text, Long tsLong) {
+    private void get_tone(String text, Long ts_long) {
         ToneAnalyzer service = new ToneAnalyzer("2016-05-19");
         service.setUsernameAndPassword("dc5d7b0c-e411-45d5-bd0e-d6e7dad51e9c", "FiUH5MYA1Z4r");
 
@@ -263,36 +259,38 @@ public class SummarizeText extends Activity {
         ElementTone el = tone.getDocumentTone();
         ToneCategory tc = (ToneCategory) el.getTones().toArray()[0];
         List<ToneScore> ts = tc.getTones();
-        update_entries(tsLong, ts);
-        System.out.println(ts);
+
+        update_entries(ts_long, ts);
+        update_chart();
     }
 
 
-    private void startRecording() {
+    private void start_recording() {
         recorder = new AudioRecord(
                 MediaRecorder.AudioSource.MIC,
                 RECORDER_SAMPLERATE,
                 RECORDER_CHANNELS,
                 RECORDER_AUDIO_ENCODING,
                 bufferSize);
+
         int i = recorder.getState();
         if(i==1) recorder.startRecording();
 
-        isRecording = true;
+        is_recording = true;
 
-        recordingThread = new Thread(new Runnable() {
+        recording_thread = new Thread(new Runnable() {
             @Override
             public void run() {
                 writeAudioDataToFile();
             }
         }, "AudioRecorder Thread");
 
-        recordingThread.start();
+        recording_thread.start();
     }
 
     private void writeAudioDataToFile() {
         byte data[] = new byte[bufferSize];
-        String filename = mTmpFileName;
+        String filename = tmp_file_name;
         FileOutputStream os = null;
 
         try {
@@ -302,7 +300,7 @@ public class SummarizeText extends Activity {
         }
 
         if(null != os) {
-            while(isRecording) {
+            while(is_recording) {
                 if(AudioRecord.ERROR_INVALID_OPERATION != recorder.read(data, 0, bufferSize)) {
                     try {
                         os.write(data);
@@ -320,9 +318,9 @@ public class SummarizeText extends Activity {
         }
     }
 
-    private void stopRecording() {
+    private void stop_recording() {
         if(null != recorder) {
-            isRecording = false;
+            is_recording = false;
 
             if(recorder.getState() == 1) {
                 recorder.stop();
@@ -330,15 +328,16 @@ public class SummarizeText extends Activity {
 
             recorder.release();
             recorder = null;
-            recordingThread = null;
+            recording_thread.interrupt();
+            recording_thread = null;
         }
 
-        copyWaveFile(mTmpFileName, mWavFileName);
+        copyWaveFile(tmp_file_name, wav_file_name);
         deleteTempFile();
     }
 
     private void deleteTempFile() {
-        File file = new File(mTmpFileName);
+        File file = new File(tmp_file_name);
         file.delete();
     }
 
@@ -356,7 +355,7 @@ public class SummarizeText extends Activity {
             long totalAudioLen = in.getChannel().size();
             long totalDataLen = totalAudioLen + 36;
 
-            WriteWaveFileHeader(out, totalAudioLen, totalDataLen, RECORDER_SAMPLERATE, channels, byteRate);
+            writeWavFileHeader(out, totalAudioLen, totalDataLen, RECORDER_SAMPLERATE, channels, byteRate);
 
             while(in.read(data) != -1) {
                 out.write(data);
@@ -371,7 +370,7 @@ public class SummarizeText extends Activity {
         }
     }
 
-    private void WriteWaveFileHeader(FileOutputStream out, long totalAudioLen, long totalDataLen,
+    private void writeWavFileHeader(FileOutputStream out, long totalAudioLen, long totalDataLen,
                                      long longSampleRate, int channels, long byteRate)
             throws IOException {
         byte[] header = new byte[44];
@@ -423,5 +422,4 @@ public class SummarizeText extends Activity {
 
         out.write(header, 0, 44);
     }
-
 }
