@@ -71,7 +71,9 @@ public class SummarizeText extends Activity {
                 String text = Arrays.toString(dataset);
 
                 wv.loadUrl("javascript:initGraph(" +
-                        text + ")");
+                        text + ", " +
+                (wv.getHeight()) + ", "
+                        + (wv.getWidth()) + ")");
             }
         });
 
