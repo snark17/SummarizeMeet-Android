@@ -95,18 +95,9 @@ public class SummarizeText extends Activity {
             }
         });
 
-        initialize_data();
         chart = findViewById(R.id.chart);
         initialize_chart();
         start_recording();
-    }
-
-    private void initialize_data() {
-        anger_entries.add(new Entry(0f, 0f));
-        disgust_entries.add(new Entry(0f, 0f));
-        fear_entries.add(new Entry(0f, 0f));
-        joy_entries.add(new Entry(0f, 0f));
-        sadness_entries.add(new Entry(0f, 0f));
     }
 
     private void update_chart() {
@@ -261,7 +252,11 @@ public class SummarizeText extends Activity {
         List<ToneScore> ts = tc.getTones();
 
         update_entries(ts_long, ts);
-        update_chart();
+        runOnUiThread(new Runnable() {
+            public void run() {
+                update_chart();
+            }
+        });
     }
 
 
