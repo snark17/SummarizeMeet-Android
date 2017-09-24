@@ -2,6 +2,8 @@ function initGraph(data, pHeight, pWidth) {
 
     var height = parseInt(pHeight);
     var width = parseInt(pWidth);
+    var textLabelSuffix = "%";
+    var svg = d3.select("body").append("svg").attr("height", height).attr("width", width);
 
     // Parse the date / time
     var	parseDate = d3.time.format("%Y-%m").parse;
@@ -19,9 +21,6 @@ function initGraph(data, pHeight, pWidth) {
         .scale(y)
         .orient("left")
         .ticks(10);
-
-    var svg = d3.select("body").append("svg").attr("height", height).attr("width", width)
-      .append("g");
 
     data.forEach(function(d) {
         d.date = parseDate(d.date);
