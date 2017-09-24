@@ -82,7 +82,7 @@ public class SummarizeText extends Activity {
             public void onClick(View v) {
                 if (!completed) {
                     stop_recording();
-                    thread_make_request();
+                    make_request();
 
                     mStopButton.setText(R.string.goback);
                 } else {
@@ -96,20 +96,6 @@ public class SummarizeText extends Activity {
         chart = findViewById(R.id.chart);
         initialize_chart();
         start_recording();
-    }
-
-    private void thread_make_request() {
-        final ProgressDialog progressDialog = ProgressDialog.show(this, "", "Please wait...");
-        new Thread() {
-            public void run() {
-                try{
-                    make_request();
-                } catch (Exception e) {
-                    Log.e("tag", e.getMessage());
-                }
-                progressDialog.dismiss();
-            }
-        }.start();
     }
 
     private void update_chart() {
