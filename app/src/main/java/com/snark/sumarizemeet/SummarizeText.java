@@ -11,12 +11,22 @@ import java.io.FileNotFoundException;
 import java.lang.reflect.Array;
 import java.util.List;
 
+import com.ibm.watson.developer_cloud.natural_language_understanding.v1.NaturalLanguageUnderstanding;
+import com.ibm.watson.developer_cloud.natural_language_understanding.v1.model.AnalysisResults;
+import com.ibm.watson.developer_cloud.natural_language_understanding.v1.model.AnalyzeOptions;
+import com.ibm.watson.developer_cloud.natural_language_understanding.v1.model.EntitiesOptions;
+import com.ibm.watson.developer_cloud.natural_language_understanding.v1.model.Features;
+import com.ibm.watson.developer_cloud.natural_language_understanding.v1.model.KeywordsOptions;
 import com.ibm.watson.developer_cloud.speech_to_text.v1.SpeechToText;
 import com.ibm.watson.developer_cloud.speech_to_text.v1.model.RecognizeOptions;
 import com.ibm.watson.developer_cloud.speech_to_text.v1.model.SpeechAlternative;
 import com.ibm.watson.developer_cloud.speech_to_text.v1.model.SpeechResults;
 import com.ibm.watson.developer_cloud.speech_to_text.v1.model.Transcript;
 import com.ibm.watson.developer_cloud.speech_to_text.v1.websocket.BaseRecognizeCallback;
+import com.ibm.watson.developer_cloud.tone_analyzer.v3.ToneAnalyzer;
+import com.ibm.watson.developer_cloud.tone_analyzer.v3.model.Tone;
+import com.ibm.watson.developer_cloud.tone_analyzer.v3.model.ToneAnalysis;
+import com.ibm.watson.developer_cloud.tone_analyzer.v3.model.ToneOptions;
 
 public class SummarizeText extends Activity {
     Button mReturnButton;
@@ -54,12 +64,11 @@ public class SummarizeText extends Activity {
             public void onTranscription(SpeechResults speechResults) {
 
                if (speechResults.isFinal()) {
-                   //speechResults.getResults()
-                   //List<Transcript> value = speechResults.getResults();
                   Transcript value = (Transcript) speechResults.getResults().toArray()[0];
                    SpeechAlternative middle = (SpeechAlternative) value.getAlternatives().toArray()[0];
                    System.out.println(middle.getTranscript());
-
+                   get_nlp(middle.getTranscript());
+                   get_tone(middle.getTranscript());
                }
 
 
@@ -80,6 +89,55 @@ public class SummarizeText extends Activity {
         catch (FileNotFoundException e) {
             e.printStackTrace();
         }
+
+    }
+    private void get_nlp(String text){
+        NaturalLanguageUnderstanding service = new NaturalLanguageUnderstanding(
+                NaturalLanguageUnderstanding.VERSION_DATE_2017_02_27,
+                "87dd97fe-25de-4ea0-97ff-765925ac659f",
+                "oShSDWvUoTeY"
+        );
+
+
+        EntitiesOptions entitiesOptions = new EntitiesOptions.Builder()
+                .emotion(true)
+                .sentiment(true)
+                .limit(2)
+                .build();
+
+        KeywordsOptions keywordsOptions = new KeywordsOptions.Builder()
+                .emotion(true)
+                .sentiment(true)
+                .limit(2)
+                .build();
+
+        Features features = new Features.Builder()
+                .entities(entitiesOptions)
+                .keywords(keywordsOptions)
+                .build();
+
+        AnalyzeOptions parameters = new AnalyzeOptions.Builder()
+                .text(text)
+                .features(features)
+                .build();
+
+        AnalysisResults response = service
+                .analyze(parameters)
+                .execute();
+        System.out.println(response);
+
+    }
+    private void get_tone(String text) {
+        ToneAnalyzer service = new ToneAnalyzer("2016-05-19");
+        service.setUsernameAndPassword("dc5d7b0c-e411-45d5-bd0e-d6e7dad51e9c", "FiUH5MYA1Z4r");
+
+
+
+        ToneOptions options = new ToneOptions.Builder()
+                .addTone(Tone.EMOTION).build();
+        ToneAnalysis tone =
+                service.getTone(text, options).execute();
+        System.out.println(tone);
 
     }
 }
