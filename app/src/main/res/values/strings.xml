@@ -3,4 +3,5 @@
     <string name="header">Analysis</string>
     <string name="start">Start Meeting</string>
     <string name="stop">End Meeting</string>
+    <string name="goback">Return to Home</string>
 </resources>

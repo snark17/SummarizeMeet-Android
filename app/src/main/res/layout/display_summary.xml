@@ -34,7 +34,7 @@
             android:textColor="@color/primary_material_light"
             android:background="@drawable/rectangle"
             android:textSize="12sp"
-            android:text="Return" />
+            android:text="@string/stop" />
     </RelativeLayout>
 
 </RelativeLayout>
