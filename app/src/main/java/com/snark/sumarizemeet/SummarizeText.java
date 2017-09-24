@@ -67,7 +67,6 @@ public class SummarizeText extends Activity {
         BaseRecognizeCallback callback = new BaseRecognizeCallback() {
             @Override
             public void onTranscription(SpeechResults speechResults) {
-
                if (speechResults.isFinal()) {
                   Transcript value = (Transcript) speechResults.getResults().toArray()[0];
                    SpeechAlternative middle = (SpeechAlternative) value.getAlternatives().toArray()[0];
@@ -76,7 +75,6 @@ public class SummarizeText extends Activity {
                    get_tone(middle.getTranscript());
                }
             }
-
 
             @Override
             public void onDisconnected() {
@@ -99,7 +97,6 @@ public class SummarizeText extends Activity {
                 "87dd97fe-25de-4ea0-97ff-765925ac659f",
                 "oShSDWvUoTeY"
         );
-
 
         EntitiesOptions entitiesOptions = new EntitiesOptions.Builder()
                 .emotion(true)
@@ -132,8 +129,6 @@ public class SummarizeText extends Activity {
     private void get_tone(String text) {
         ToneAnalyzer service = new ToneAnalyzer("2016-05-19");
         service.setUsernameAndPassword("dc5d7b0c-e411-45d5-bd0e-d6e7dad51e9c", "FiUH5MYA1Z4r");
-
-
 
         ToneOptions options = new ToneOptions.Builder()
                 .addTone(Tone.EMOTION).build();
