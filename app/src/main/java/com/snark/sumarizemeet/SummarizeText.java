@@ -4,19 +4,18 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.webkit.WebChromeClient;
-import android.webkit.WebSettings;
-import android.webkit.WebView;
-import android.webkit.WebViewClient;
 import android.widget.Button;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.lang.reflect.Array;
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
 
-import com.github.mikephil.charting.charts.BarChart;
+import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.LineData;
+import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.ibm.watson.developer_cloud.natural_language_understanding.v1.NaturalLanguageUnderstanding;
 import com.ibm.watson.developer_cloud.natural_language_understanding.v1.model.AnalysisResults;
 import com.ibm.watson.developer_cloud.natural_language_understanding.v1.model.AnalyzeOptions;
@@ -38,8 +37,16 @@ import com.ibm.watson.developer_cloud.tone_analyzer.v3.model.ToneOptions;
 import com.ibm.watson.developer_cloud.tone_analyzer.v3.model.ToneScore;
 
 public class SummarizeText extends Activity {
+    private LineChart chart;
+    private ArrayList<Entry> angerEntries = new ArrayList<>();
+    private ArrayList<Entry> disgustEntries = new ArrayList<>();
+    private ArrayList<Entry> fearEntries = new ArrayList<>();
+    private ArrayList<Entry> joyEntries = new ArrayList<>();
+    private ArrayList<Entry> sadnessEntries = new ArrayList<>();
+
+
     Button mReturnButton;
-    private WebView wv;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,15 +61,15 @@ public class SummarizeText extends Activity {
             }
         });
 
-        create_chart();
+        chart = findViewById(R.id.chart);
+        update_chart();
         make_request();
     }
 
-    private void create_chart() {
-
-
-        BarChart chart = findViewById(R.id.chart);
+    private void update_chart() {
     }
+
+
     private void make_request(){
         SpeechToText service = new SpeechToText();
         service.setUsernameAndPassword("b06f630e-1815-4fa5-b35b-3a229829d8b1", "5lIGB3ugweLZ");
