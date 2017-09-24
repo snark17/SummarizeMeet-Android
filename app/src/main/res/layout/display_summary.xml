@@ -28,47 +28,26 @@
             android:layout_centerHorizontal="true" />
     </RelativeLayout>
 
-
-    <RelativeLayout
-        android:id="@+id/summary"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/header"
-        android:clickable="true"
-        android:gravity="center_vertical"
-        android:layout_centerInParent="true">
-
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:minHeight="150sp"
-            android:layout_marginRight="20sp"
-            android:layout_marginLeft="20sp"
-            android:layout_marginBottom="20sp"
-            android:layout_alignParentEnd="true"
-            android:background="@drawable/light_rectangle">
-        </FrameLayout>
-
-    </RelativeLayout>
-
     <RelativeLayout
         android:id="@+id/graph"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/summary"
+        android:layout_below="@+id/header"
         android:layout_above="@+id/btn_return"
         android:clickable="true"
-        android:gravity="center_vertical"
-        android:layout_centerInParent="true">
-        <WebView
-            android:id="@+id/wv"
+        android:background="@drawable/light_rectangle">
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:minHeight="200sp"
-            android:layout_marginRight="20sp"
-            android:layout_marginLeft="20sp"
-            android:background="@drawable/light_rectangle">
-        </WebView>
+            android:layout_height="match_parent">
+            <WebView
+                android:id="@+id/wv"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="200sp"
+                android:layout_marginRight="20sp"
+                android:layout_marginLeft="20sp">
+            </WebView>
+        </ScrollView>
     </RelativeLayout>
 
     <Button

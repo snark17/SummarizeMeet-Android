@@ -49,6 +49,7 @@ public class SummarizeText extends Activity {
         });
 
         WebView wv = findViewById(R.id.wv);
+        wv.getSettings().setJavaScriptEnabled(true);
         wv.loadUrl("file:///android_asset/html/sentiments.html");
 
         make_request();
