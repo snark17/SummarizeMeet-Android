@@ -4,12 +4,16 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.webkit.WebChromeClient;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.Button;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.lang.reflect.Array;
+import java.util.Arrays;
 import java.util.List;
 
 import com.ibm.watson.developer_cloud.natural_language_understanding.v1.NaturalLanguageUnderstanding;
@@ -34,6 +38,7 @@ import com.ibm.watson.developer_cloud.tone_analyzer.v3.model.ToneScore;
 
 public class SummarizeText extends Activity {
     Button mReturnButton;
+    private WebView wv;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,8 +53,28 @@ public class SummarizeText extends Activity {
             }
         });
 
-        WebView wv = findViewById(R.id.wv);
+        wv = (WebView) findViewById(R.id.wv);
+        final WebSettings webSettings = wv.getSettings();
+        webSettings.setJavaScriptEnabled(true);
         wv.getSettings().setJavaScriptEnabled(true);
+        webSettings.setBuiltInZoomControls(true);
+        webSettings.setSupportZoom(true);
+        webSettings.setUseWideViewPort(true);
+        wv.setWebChromeClient(new WebChromeClient());
+        wv.setInitialScale(1);
+
+        wv.setWebViewClient(new WebViewClient() {
+            @Override
+            public void onPageFinished(WebView view, String url) {
+                // after the HTML page loads, run JS to initialize graph
+                int dataset[] = new int[] {5,10,15,20,35};
+                String text = Arrays.toString(dataset);
+
+                wv.loadUrl("javascript:initGraph(" +
+                        text + ")");
+            }
+        });
+
         wv.loadUrl("file:///android_asset/html/sentiments.html");
 
         make_request();
