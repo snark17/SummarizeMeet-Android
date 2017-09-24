@@ -4,5 +4,38 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.snark.sumarizemeet.SummarizeText">
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="20sp">
+
+        <RelativeLayout
+            android:id="@+id/header"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="100sp">
+        </RelativeLayout>
+
+        <FrameLayout
+            android:id="@+id/summary"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/header"
+            android:layout_above="@+id/btn_return"
+            android:layout_marginTop="20sp"
+            android:layout_marginBottom="20sp"
+            android:layout_alignParentEnd="true"
+            android:background="@android:color/background_dark">
+        </FrameLayout>
+
+        <Button
+            android:id="@+id/btn_return"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:text="Return" />
+
+
+    </RelativeLayout>
 
 </RelativeLayout>

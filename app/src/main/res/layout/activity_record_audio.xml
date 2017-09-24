@@ -20,7 +20,6 @@
         android:text="@string/start"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true" />
-
     </RelativeLayout>
 
     <RelativeLayout
