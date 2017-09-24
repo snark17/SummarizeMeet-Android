@@ -10,6 +10,9 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.TimeZone;
 
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.data.Entry;
@@ -84,11 +87,21 @@ public class SummarizeText extends Activity {
             @Override
             public void onTranscription(SpeechResults speechResults) {
                if (speechResults.isFinal()) {
+
                   Transcript value = (Transcript) speechResults.getResults().toArray()[0];
                    SpeechAlternative middle = (SpeechAlternative) value.getAlternatives().toArray()[0];
                    System.out.println(middle.getTranscript());
-                   get_nlp(middle.getTranscript());
-                   get_tone(middle.getTranscript());
+
+                   Long tsLong = System.currentTimeMillis()/1000;
+                   System.out.println(tsLong);
+
+                   get_nlp(middle.getTranscript(), tsLong);
+                   get_tone(middle.getTranscript(), tsLong);
+
+
+
+
+
                }
             }
 
@@ -107,7 +120,7 @@ public class SummarizeText extends Activity {
         }
 
     }
-    private void get_nlp(String text){
+    private void get_nlp(String text, Long tsLong){
         NaturalLanguageUnderstanding service = new NaturalLanguageUnderstanding(
                 NaturalLanguageUnderstanding.VERSION_DATE_2017_02_27,
                 "87dd97fe-25de-4ea0-97ff-765925ac659f",
@@ -142,7 +155,7 @@ public class SummarizeText extends Activity {
         System.out.println(response.toString());
 
     }
-    private void get_tone(String text) {
+    private void get_tone(String text, Long tsLong) {
         ToneAnalyzer service = new ToneAnalyzer("2016-05-19");
         service.setUsernameAndPassword("dc5d7b0c-e411-45d5-bd0e-d6e7dad51e9c", "FiUH5MYA1Z4r");
 
