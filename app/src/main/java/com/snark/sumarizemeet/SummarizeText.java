@@ -16,6 +16,7 @@ import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.List;
 
+import com.github.mikephil.charting.charts.BarChart;
 import com.ibm.watson.developer_cloud.natural_language_understanding.v1.NaturalLanguageUnderstanding;
 import com.ibm.watson.developer_cloud.natural_language_understanding.v1.model.AnalysisResults;
 import com.ibm.watson.developer_cloud.natural_language_understanding.v1.model.AnalyzeOptions;
@@ -53,33 +54,15 @@ public class SummarizeText extends Activity {
             }
         });
 
-        wv = findViewById(R.id.wv);
-        wv.getSettings().setJavaScriptEnabled(true);
-        final WebSettings webSettings = wv.getSettings();
-        webSettings.setJavaScriptEnabled(true);
-        webSettings.setBuiltInZoomControls(true);
-        webSettings.setSupportZoom(true);
-        webSettings.setUseWideViewPort(true);
-        wv.setWebChromeClient(new WebChromeClient());
-        wv.setInitialScale(1);
-
-        wv.setWebViewClient(new WebViewClient() {
-            @Override
-            public void onPageFinished(WebView view, String url) {
-                // after the HTML page loads, run JS to initialize graph
-                int dataset[] = new int[] {5,10,15,20,35};
-                String text = Arrays.toString(dataset);
-
-                wv.loadUrl("javascript:initGraph(" + text + ", " +
-                        (wv.getHeight()) + ", " + (wv.getWidth()) + ")");
-            }
-        });
-
-        wv.loadUrl("file:///android_asset/html/sentiments.html");
-
+        create_chart();
         make_request();
     }
 
+    private void create_chart() {
+
+
+        BarChart chart = findViewById(R.id.chart);
+    }
     private void make_request(){
         SpeechToText service = new SpeechToText();
         service.setUsernameAndPassword("b06f630e-1815-4fa5-b35b-3a229829d8b1", "5lIGB3ugweLZ");
@@ -164,6 +147,5 @@ public class SummarizeText extends Activity {
         ToneCategory tc = (ToneCategory) el.getTones().toArray()[0];
         List<ToneScore> ts = tc.getTones();
         System.out.println(ts);
-
     }
 }
