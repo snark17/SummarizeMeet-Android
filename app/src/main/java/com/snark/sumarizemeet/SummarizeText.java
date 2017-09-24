@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -71,6 +72,8 @@ public class SummarizeText extends Activity {
     Button mStopButton;
     private boolean completed = false;
 
+    TextView keywordsText;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -79,6 +82,8 @@ public class SummarizeText extends Activity {
         bufferSize = AudioRecord.getMinBufferSize(RECORDER_SAMPLERATE, RECORDER_CHANNELS, RECORDER_AUDIO_ENCODING)*3;
         tmp_file_name = getExternalCacheDir().getAbsolutePath() + "/audiorecord.3gp";
         wav_file_name = getExternalCacheDir().getAbsolutePath() + "/audiorecord.wav";
+
+        keywordsText = findViewById(R.id.words);
 
         mStopButton = findViewById(R.id.btn_return);
         mStopButton.setOnClickListener(new View.OnClickListener() {
@@ -234,12 +239,23 @@ public class SummarizeText extends Activity {
         AnalysisResults response = service
                 .analyze(parameters)
                 .execute();
-        List<KeywordsResult> kwr = response.getKeywords();
-        List<String> keywordsss = new ArrayList<String>();
-        for(KeywordsResult x : kwr){
-            keywordsss.add(x.getText());
-        }
-        System.out.println(keywordsss);
+        final List<KeywordsResult> kwr = response.getKeywords();
+
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                for (int i=0;i<kwr.size();i++) {
+                    keywordsText.append(((KeywordsResult)kwr.toArray()[i]).getText());
+                    if (i != kwr.size() - 1) {
+                        keywordsText.append(", ");
+                    }
+                }
+                if (kwr.size() == 0) {
+                    keywordsText.append("No keywords found");
+                }
+            }
+        });
+
     }
 
     private void get_tone(String text, Long ts_long) {
