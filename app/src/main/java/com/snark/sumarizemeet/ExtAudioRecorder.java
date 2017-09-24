@@ -19,6 +19,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 public class ExtAudioRecorder extends Activity {
     private static final int RECORDER_BPP = 16;
@@ -78,7 +79,9 @@ public class ExtAudioRecorder extends Activity {
                     mRecordButton.setText(R.string.stop);
                 } else {
                     stopRecording();
-                    mRecordButton.setEnabled(false);
+                    TextView title = findViewById(R.id.text_title);
+                    title.setVisibility(View.GONE);
+                    mRecordButton.setVisibility(View.GONE);
                 }
                 recording = !recording;
             }
@@ -93,8 +96,7 @@ public class ExtAudioRecorder extends Activity {
                 RECORDER_AUDIO_ENCODING,
                 bufferSize);
         int i = recorder.getState();
-        if(i==1)
-            recorder.startRecording();
+        if(i==1) recorder.startRecording();
 
         isRecording = true;
 
