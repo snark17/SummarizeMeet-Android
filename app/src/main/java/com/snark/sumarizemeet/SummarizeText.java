@@ -35,6 +35,7 @@ import com.ibm.watson.developer_cloud.natural_language_understanding.v1.model.An
 import com.ibm.watson.developer_cloud.natural_language_understanding.v1.model.EntitiesOptions;
 import com.ibm.watson.developer_cloud.natural_language_understanding.v1.model.Features;
 import com.ibm.watson.developer_cloud.natural_language_understanding.v1.model.KeywordsOptions;
+import com.ibm.watson.developer_cloud.natural_language_understanding.v1.model.KeywordsResult;
 import com.ibm.watson.developer_cloud.speech_to_text.v1.SpeechToText;
 import com.ibm.watson.developer_cloud.speech_to_text.v1.model.RecognizeOptions;
 import com.ibm.watson.developer_cloud.speech_to_text.v1.model.SpeechAlternative;
@@ -233,7 +234,12 @@ public class SummarizeText extends Activity {
         AnalysisResults response = service
                 .analyze(parameters)
                 .execute();
-        System.out.println(response.toString());
+        List<KeywordsResult> kwr = response.getKeywords();
+        List<String> keywordsss = new ArrayList<String>();
+        for(KeywordsResult x : kwr){
+            keywordsss.add(x.getText());
+        }
+        System.out.println(keywordsss);
     }
 
     private void get_tone(String text, Long ts_long) {
