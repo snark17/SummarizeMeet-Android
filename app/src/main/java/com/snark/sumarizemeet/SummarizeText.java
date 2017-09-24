@@ -5,10 +5,14 @@ import android.os.Bundle;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.lang.reflect.Array;
+import java.util.List;
 
 import com.ibm.watson.developer_cloud.speech_to_text.v1.SpeechToText;
 import com.ibm.watson.developer_cloud.speech_to_text.v1.model.RecognizeOptions;
+import com.ibm.watson.developer_cloud.speech_to_text.v1.model.SpeechAlternative;
 import com.ibm.watson.developer_cloud.speech_to_text.v1.model.SpeechResults;
+import com.ibm.watson.developer_cloud.speech_to_text.v1.model.Transcript;
 import com.ibm.watson.developer_cloud.speech_to_text.v1.websocket.BaseRecognizeCallback;
 
 public class SummarizeText extends Activity {
@@ -33,8 +37,14 @@ public class SummarizeText extends Activity {
             public void onTranscription(SpeechResults speechResults) {
 
                if (speechResults.isFinal()) {
-                   System.out.println(speechResults);
+                   //speechResults.getResults()
+                   //List<Transcript> value = speechResults.getResults();
+                  Transcript value = (Transcript) speechResults.getResults().toArray()[0];
+                   SpeechAlternative middle = (SpeechAlternative) value.getAlternatives().toArray()[0];
+                   System.out.println(middle.getTranscript());
+
                }
+
 
 
             }
