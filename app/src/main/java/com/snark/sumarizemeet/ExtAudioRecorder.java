@@ -78,7 +78,7 @@ public class ExtAudioRecorder extends Activity {
                     mRecordButton.setText(R.string.stop);
                 } else {
                     stopRecording();
-                    mRecordButton.setText(R.string.start);
+                    mRecordButton.setEnabled(false);
                 }
                 recording = !recording;
             }

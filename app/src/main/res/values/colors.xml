@@ -1,8 +1,7 @@
-<resources>
-
-    <color name="primary_material_light">#fdfdfb</color>
-    <color name="primary_dark_material_light">#deded5</color>
-    <color name="accent_material_light">#4175a4</color>
-    <color name="background_material_light">#f7f7ed</color>
-    <color name="foreground_material_light">#deded5</color>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <color tools:override="true" name="primary_material_light">#fdfdfb</color>
+    <color tools:override="true" name="primary_dark_material_light">#94948e</color>
+    <color tools:override="true" name="accent_material_light">#4175a4</color>
+    <color tools:override="true" name="background_material_light">#f7f7ed</color>
+    <color tools:override="true" name="foreground_material_light">#deded5</color>
 </resources>
