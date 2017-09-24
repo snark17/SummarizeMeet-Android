@@ -21,9 +21,12 @@ import com.ibm.watson.developer_cloud.speech_to_text.v1.model.SpeechResults;
 import com.ibm.watson.developer_cloud.speech_to_text.v1.model.Transcript;
 import com.ibm.watson.developer_cloud.speech_to_text.v1.websocket.BaseRecognizeCallback;
 import com.ibm.watson.developer_cloud.tone_analyzer.v3.ToneAnalyzer;
+import com.ibm.watson.developer_cloud.tone_analyzer.v3.model.ElementTone;
 import com.ibm.watson.developer_cloud.tone_analyzer.v3.model.Tone;
 import com.ibm.watson.developer_cloud.tone_analyzer.v3.model.ToneAnalysis;
+import com.ibm.watson.developer_cloud.tone_analyzer.v3.model.ToneCategory;
 import com.ibm.watson.developer_cloud.tone_analyzer.v3.model.ToneOptions;
+import com.ibm.watson.developer_cloud.tone_analyzer.v3.model.ToneScore;
 
 public class SummarizeText extends Activity {
     @Override
@@ -39,7 +42,8 @@ public class SummarizeText extends Activity {
 
         RecognizeOptions options = new RecognizeOptions.Builder()
                 .model("en-US_BroadbandModel").contentType("audio/wav")
-                .interimResults(true).maxAlternatives(0)
+                .interimResults(true)
+                .maxAlternatives(0)
                 .build();
 
         BaseRecognizeCallback callback = new BaseRecognizeCallback() {
@@ -53,9 +57,6 @@ public class SummarizeText extends Activity {
                    get_nlp(middle.getTranscript());
                    get_tone(middle.getTranscript());
                }
-
-
-
             }
 
 
@@ -107,7 +108,7 @@ public class SummarizeText extends Activity {
         AnalysisResults response = service
                 .analyze(parameters)
                 .execute();
-        System.out.println(response);
+        System.out.println(response.toString());
 
     }
     private void get_tone(String text) {
@@ -120,7 +121,10 @@ public class SummarizeText extends Activity {
                 .addTone(Tone.EMOTION).build();
         ToneAnalysis tone =
                 service.getTone(text, options).execute();
-        System.out.println(tone);
+        ElementTone el = tone.getDocumentTone();
+        ToneCategory tc = (ToneCategory) el.getTones().toArray()[0];
+        List<ToneScore> ts = tc.getTones();
+        System.out.println(ts);
 
     }
 }
