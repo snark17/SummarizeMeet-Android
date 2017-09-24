@@ -2,62 +2,39 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.snark.sumarizemeet.SummarizeText"
-    >
-
-    <RelativeLayout
-        android:id="@+id/header"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:minHeight="50sp"
-        android:layout_margin="10sp"
-        android:clickable="true"
-        android:gravity="center_vertical">
-
-        <TextView
-            android:id="@+id/btn_record"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Meeting Summary"
-            android:textColor="@color/primary_dark_material_light"
-            android:padding="10sp"
-            android:textAllCaps="true"
-            android:textStyle="bold"
-            android:textSize="16sp"
-            android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true" />
-    </RelativeLayout>
+    tools:context="com.snark.sumarizemeet.SummarizeText">
 
     <RelativeLayout
         android:id="@+id/graph"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/header"
-        android:layout_above="@+id/btn_return"
+        android:layout_above="@+id/meeting_return"
         android:clickable="true"
+        android:layout_margin="20sp"
         android:background="@drawable/light_rectangle">
-        <ScrollView
+        <WebView
+            android:id="@+id/wv"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-            <WebView
-                android:id="@+id/wv"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:minHeight="200sp"
-                android:layout_marginRight="20sp"
-                android:layout_marginLeft="20sp">
-            </WebView>
-        </ScrollView>
+        </WebView>
     </RelativeLayout>
 
-    <Button
-        android:id="@+id/btn_return"
+    <RelativeLayout
+        android:id="@+id/meeting_return"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="20sp"
-        android:layout_alignParentBottom="true"
-        android:textColor="@color/primary_material_light"
-        android:background="@drawable/rectangle"
-        android:text="Return" />
+        android:layout_height="40dp"
+        android:layout_marginRight="20sp"
+        android:layout_marginLeft="20sp"
+        android:layout_marginBottom="20sp"
+        android:layout_alignParentBottom="true">
+        <Button
+            android:id="@+id/btn_return"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:textColor="@color/primary_material_light"
+            android:background="@drawable/rectangle"
+            android:textSize="12sp"
+            android:text="Return" />
+    </RelativeLayout>
 
 </RelativeLayout>
