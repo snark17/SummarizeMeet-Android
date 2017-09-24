@@ -1,64 +1,60 @@
-function initGraph(data, pHeight, pWidth) {
+function initGraph(dataset, pHeight, pWidth) {
+  var height = parseInt(pHeight);
+  var width = parseInt(pWidth);
+  var svg = d3.select("#piechart");
+  var textLabelSuffix = "%";
 
-    var height = parseInt(pHeight);
-    var width = parseInt(pWidth);
-    var textLabelSuffix = "%";
-    var svg = d3.select("#bargraph");
+  showPieChart(dataset, svg, height, width,
+      textLabelSuffix);
+}
 
-    svg.attr("width", width).attr("height", height);
+function showPieChart(dataset, svg, height, width,
+  textLabelSuffix)
+{
+  var outerRadius = width / 2;
+  var innerRadius = 0;
 
-    // Parse the date / time
-    var	parseDate = d3.time.format("%Y-%m").parse;
-    svg.append("g");
+  // set height/width to match the SVG element
+  svg.attr("height", height).attr("width", width);
 
-    var x = d3.scale.ordinal().rangeRoundBands([0, width], .05);
+  // create a new pie layout
+  var pie = d3.layout.pie();
 
-    var y = d3.scale.linear().range([height, 0]);
+  // initialize arcs/wedges to span
+  // the radius of the circle
+  var arc = d3.svg.arc()
+               .innerRadius(innerRadius)
+               .outerRadius(outerRadius);
 
-    var xAxis = svg.axis()
-        .scale(x)
-        .orient("bottom")
-        .tickFormat(d3.time.format("%Y-%m"));
+  // create groups
+  var arcs = svg.selectAll("g.arc")
+                // bind dataset to pie layout
+                .data(pie(dataset))
+                // create groups
+                .enter()
+                // append groups
+                .append("g")
+                // create arcs
+                .attr("class", "arc")
+                // position each arc in the pie layout
+                .attr("transform", "translate(" +
+                 outerRadius + "," +
+                 outerRadius + ")");
 
-    var yAxis = svg.axis()
-        .scale(y)
-        .orient("left")
-        .ticks(10);
 
-    data.forEach(function(d) {
-        d.date = parseDate(d.date);
-        d.value = +d.value;
-    });
+  // initialize color scale - refer to
+  // https://github.com/mbostock/d3/wiki/Ordinal-Scales
+  var color = d3.scale.category10();
 
-    x.domain(data.map(function(d) { return d.date; }));
-    y.domain([0, d3.max(data, function(d) { return d.value; })]);
+  arcs.append("path")
+      .attr("fill", function(d,i) { return color(i); })
+      .attr("d", arc);
 
-    svg.append("g")
-      .attr("class", "x axis")
-      .attr("transform", "translate(0," + height + ")")
-      .call(xAxis)
-    .selectAll("text")
-      .style("text-anchor", "end")
-      .attr("dx", "-.8em")
-      .attr("dy", "-.55em")
-      .attr("transform", "rotate(-90)" );
-
-    svg.append("g")
-      .attr("class", "y axis")
-      .call(yAxis)
-    .append("text")
-      .attr("transform", "rotate(-90)")
-      .attr("y", 6)
-      .attr("dy", ".71em")
-      .style("text-anchor", "end")
-      .text("Value ($)");
-
-    svg.selectAll("bar")
-      .data(data)
-    .enter().append("rect")
-      .style("fill", "steelblue")
-      .attr("x", function(d) { return x(d.date); })
-      .attr("width", x.rangeBand())
-      .attr("y", function(d) { return y(d.value); })
-      .attr("height", function(d) { return height - y(d.value); });
-};
+  arcs.append("text")
+      .attr("transform", function(d) {
+          return "translate(" + arc.centroid(d) + ")";
+       })
+      .attr("text-anchor", "middle")
+      .text(function(d) { return d.value +
+         textLabelSuffix; });
+}
