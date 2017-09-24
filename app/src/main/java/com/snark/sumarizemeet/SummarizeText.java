@@ -1,7 +1,10 @@
 package com.snark.sumarizemeet;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -29,11 +32,25 @@ import com.ibm.watson.developer_cloud.tone_analyzer.v3.model.ToneOptions;
 import com.ibm.watson.developer_cloud.tone_analyzer.v3.model.ToneScore;
 
 public class SummarizeText extends Activity {
+    Button mReturnButton;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.display_summary);
+        setButtonHandlers();
         make_request();
+    }
+
+    private void setButtonHandlers() {
+        mReturnButton = findViewById(R.id.btn_return);
+
+        mReturnButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent extAudioRecorder = new Intent(SummarizeText.this, ExtAudioRecorder.class);
+                startActivity(extAudioRecorder);
+            }
+        });
     }
 
     private void make_request(){
