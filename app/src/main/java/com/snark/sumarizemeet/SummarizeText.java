@@ -1,12 +1,14 @@
 package com.snark.sumarizemeet;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.media.AudioFormat;
 import android.media.AudioRecord;
 import android.media.MediaRecorder;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
@@ -18,13 +20,12 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
-import com.github.mikephil.charting.data.Entry;
-import com.github.mikephil.charting.data.LineData;
-import com.github.mikephil.charting.data.LineDataSet;
-import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
+import com.github.mikephil.charting.data.BarEntry;
+import com.github.mikephil.charting.data.BarData;
+import com.github.mikephil.charting.data.BarDataSet;
 import com.ibm.watson.developer_cloud.natural_language_understanding.v1.NaturalLanguageUnderstanding;
 import com.ibm.watson.developer_cloud.natural_language_understanding.v1.model.AnalysisResults;
 import com.ibm.watson.developer_cloud.natural_language_understanding.v1.model.AnalyzeOptions;
@@ -59,12 +60,8 @@ public class SummarizeText extends Activity {
     private Thread recording_thread = null;
     private boolean is_recording = false;
 
-    private LineChart chart;
-    private ArrayList<Entry> anger_entries = new ArrayList<>();
-    private ArrayList<Entry> disgust_entries = new ArrayList<>();
-    private ArrayList<Entry> fear_entries = new ArrayList<>();
-    private ArrayList<Entry> joy_entries = new ArrayList<>();
-    private ArrayList<Entry> sadness_entries = new ArrayList<>();
+    private BarChart chart;
+    List<BarEntry> entries = new ArrayList<>();
     private float startTime = 0f;
 
     Button mStopButton;
@@ -85,7 +82,8 @@ public class SummarizeText extends Activity {
             public void onClick(View v) {
                 if (!completed) {
                     stop_recording();
-                    make_request();
+                    thread_make_request();
+
                     mStopButton.setText(R.string.goback);
                 } else {
                     Intent homeActivity = new Intent(SummarizeText.this, HomeActivity.class);
@@ -100,27 +98,28 @@ public class SummarizeText extends Activity {
         start_recording();
     }
 
+    private void thread_make_request() {
+        final ProgressDialog progressDialog = ProgressDialog.show(this, "", "Please wait...");
+        new Thread() {
+            public void run() {
+                try{
+                    make_request();
+                } catch (Exception e) {
+                    Log.e("tag", e.getMessage());
+                }
+                progressDialog.dismiss();
+            }
+        }.start();
+    }
+
     private void update_chart() {
-        LineDataSet angerDataSet = new LineDataSet(anger_entries, "Anger");
-        angerDataSet.setColor(Color.rgb(64, 89, 128));
-        LineDataSet disgustDataSet = new LineDataSet(disgust_entries, "Disgust");
-        disgustDataSet.setColor(Color.rgb(149, 165, 124));
-        LineDataSet fearDataSet = new LineDataSet(fear_entries, "Fear");
-        fearDataSet.setColor(Color.rgb(217, 184, 162));
-        LineDataSet joyDataSet = new LineDataSet(joy_entries, "Joy");
-        joyDataSet.setColor(Color.rgb(191, 134, 134));
-        LineDataSet sadnessDataSet = new LineDataSet(sadness_entries, "Sadness");
-        sadnessDataSet.setColor(Color.rgb(179, 48, 80));
+        BarDataSet set = new BarDataSet(entries, "BarDataSet");
+        BarData data = new BarData(set);
 
-        List<ILineDataSet> dataSets = new ArrayList<>();
-        dataSets.add(angerDataSet);
-        dataSets.add(disgustDataSet);
-        dataSets.add(fearDataSet);
-        dataSets.add(joyDataSet);
-        dataSets.add(sadnessDataSet);
+        data.setBarWidth(0.9f); // set custom bar width
+        chart.setData(data);
+        chart.setFitBars(true); // make the x-axis fit exactly all bars
 
-        LineData lineData = new LineData(dataSets);
-        chart.setData(lineData);
         chart.invalidate();
     }
     
@@ -129,7 +128,6 @@ public class SummarizeText extends Activity {
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
         xAxis.setTextSize(10f);
         xAxis.setTextColor(Color.BLACK);
-        xAxis.setAxisMinimum(0f);
         xAxis.setDrawAxisLine(true);
         xAxis.setDrawGridLines(false);
 
@@ -145,23 +143,19 @@ public class SummarizeText extends Activity {
     }
 
     private void update_entries(long ts_long, List<ToneScore> toneScores) {
-        if (startTime == 0) {
-            startTime = ts_long;
-        }
-        ts_long -= startTime;
         for (ToneScore ts : toneScores) {
             String name = ts.getId();
             float score = ts.getScore().floatValue();
             if (name.equals("anger")) {
-                anger_entries.add(new Entry(ts_long, score));
+                entries.add(new BarEntry(0, score));
             } else if (name.equals("disgust")) {
-                disgust_entries.add(new Entry(ts_long, score));
+                entries.add(new BarEntry(1, score));
             } else if (name.equals("fear")) {
-                fear_entries.add(new Entry(ts_long, score));
+                entries.add(new BarEntry(2, score));
             } else if (name.equals("joy")) {
-                joy_entries.add(new Entry(ts_long, score));
+                entries.add(new BarEntry(3, score));
             } else {
-                sadness_entries.add(new Entry(ts_long, score));
+                entries.add(new BarEntry(4, score));
             }
         }
     }
